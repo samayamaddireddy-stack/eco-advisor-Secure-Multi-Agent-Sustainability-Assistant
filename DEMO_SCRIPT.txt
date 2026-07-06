@@ -1,0 +1,82 @@
+ECO-ADVISOR DEMO SCRIPT
+Duration: ~3-4 minutes
+============================================================
+
+[0:00 — HOOK]
+
+Every day, millions of people want to live more sustainably — but they don't know where to start.
+How do I recycle this? How much CO2 is my dryer producing? How do I even begin tracking my green habits?
+Today I'm going to show you eco-advisor — a secure, multi-agent AI system built with Google's Agent Development Kit that answers all of these questions and more.
+
+[0:20 — WHAT IT IS]
+
+eco-advisor is an Agents for Good project: a secure AI assistant for everyday sustainability guidance.
+It helps users reduce their carbon footprint, understand local recycling rules, and set trackable green goals — all powered by specialized AI agents working together.
+
+[0:40 — SHOW THE BANNER]
+(show assets/cover_page_banner.png)
+
+At a glance: eco-advisor brings together multi-agent collaboration, a custom MCP server with local eco tools, and a built-in security gateway — all in a seamless conversational interface.
+
+[1:00 — ARCHITECTURE]
+(show assets/architecture_diagram.png)
+
+Let me walk through the system architecture.
+
+Every request enters through the Security Checkpoint node — this scrubs personal data like emails and phone numbers, detects prompt injection attempts, logs every action in structured JSON format, and filters off-topic requests.
+
+From there, the Eco Orchestrator agent takes over. It reads the user's intent and decides: should I call the Carbon Expert or the Waste Expert?
+
+Both experts are specialized LLM agents with access to a local MCP server — a custom tool server I built that provides:
+- get_recycling_rules: ZIP-code-specific guidelines for plastics, batteries, glass, electronics, and more
+- estimate_appliance_emissions: precise CO2 calculation based on appliance wattage and hours used
+- find_green_events: nearby community eco activities and workshops
+
+If the user wants to set a green goal, the workflow routes to a Human Confirmation node — execution pauses, and the user must confirm before the goal is saved.
+
+Finally, all paths converge at the Final Response node which renders the message beautifully in the UI.
+
+(pause)
+
+[2:00 — LIVE DEMO]
+(switch to playground at http://localhost:18081)
+
+Let me show you three real scenarios.
+
+First — Carbon Emissions:
+I'll type: "How much CO2 does running an air conditioner for 5 hours emit?"
+(pause and let it process)
+You can see the orchestrator routes this to carbon_expert, which calls the MCP tool estimate_appliance_emissions. A 1.5 kW AC running for 5 hours uses 7.5 kWh and emits approximately 2.85 kg of CO2. Specific, actionable.
+
+Second — Recycling Rules:
+I'll type: "How do I recycle plastic bottles in 90210?"
+(pause)
+The orchestrator routes to waste_expert, which calls get_recycling_rules. It tells us: plastics with resin codes #1 and #2 go in curbside blue bins. Codes #3-#7 need special facilities. Wash first.
+
+Third — Goal Setting with Human-in-the-Loop:
+I'll type: "I want to set a goal to reduce my household energy usage."
+(pause)
+Watch what happens — the workflow pauses and asks me to confirm the goal. This is our HITL node in action.
+I'll type "yes" to confirm.
+(pause and confirm)
+The goal is now saved in session state and tracked.
+
+(pause)
+
+[3:00 — SECURITY & MCP]
+
+Behind every query, the security checkpoint is silently working. PII is scrubbed before it ever reaches the LLM. Prompt injection attempts are blocked with CRITICAL-severity audit logs. All security events are written as structured JSON.
+
+The MCP server adds precision that no general LLM could provide — real zip-code-specific recycling rules and appliance-specific CO2 calculations, not vague generalizations.
+
+(pause)
+
+[3:30 — IMPACT / CLOSE]
+
+eco-advisor puts the power of multi-agent AI in the hands of everyday citizens. Whether you're a family trying to recycle properly, a building manager tracking energy use, or a school running a sustainability program — this agent helps you act, not just learn.
+
+Secure, collaborative, intelligent — eco-advisor is your personal sustainability co-pilot.
+Thank you.
+
+============================================================
+END OF DEMO SCRIPT
